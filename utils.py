@@ -27,35 +27,9 @@ from nltk.stem import WordNetLemmatizer
 # import numpy as np
 
 def read_large_file(file_object):
-	'''
-	generator for reading a big file
-	'''
+	# generator for reading a big file
 	while True:
 		data = file_object.readline()
 		if not data:
 			break
 		yield data
-
-def lemmatizer(word, pos='n'):
-    '''
-    lemmatize a word by using NLTK WordNet lemmatizer
-    pos : 'n' for noun
-          'v' for verb
-          'r' for adverb
-          'j' for adjective
-          default value is 'n' (NLTK default)
-    '''
-
-    # load lemmatizer
-    lemmatizer = WordNetLemmatizer()
-
-    lemmatized_word = lemmatizer.lemmatize(word, pos=pos)
-
-    # TODO : exception/error handing
-    #        1) saw -> see
-    # if lemmatized_word == 'saw':
-    # 	lemmatized_word = 'see'
-    # else:
-    # 	pass
-
-    return lemmatized_word

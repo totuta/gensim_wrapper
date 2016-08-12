@@ -61,7 +61,8 @@ def make_dictionary(raw_file):
 	stoplist = stopwords.words('english')
 
 	try:
-		dictionary = corpora.Dictionary(utils.lemmatize(line) for line in read_large_file(open(raw_file)))
+		dictionary = corpora.Dictionary(map(lambda x : x.split('/')[0], utils.lemmatize(line)) for line in read_large_file(open(raw_file)))
+		# dictionary = corpora.Dictionary(utils.lemmatize(line) for line in read_large_file(open(raw_file)))
 		# dictionary = corpora.Dictionary(line.lower().split() for line in read_large_file(open(raw_file)))
 		# dictionary = corpora.Dictionary(line.lower().split() for line in open(raw_file))
 
@@ -70,8 +71,6 @@ def make_dictionary(raw_file):
 		once_ids = [tokenid for tokenid, docfreq in iteritems(dictionary.dfs) if docfreq == 1]
 		dictionary.filter_tokens(stop_ids + once_ids)
 		dictionary.compactify()
-
-		# TODO : do lemmatization
 
 		return dictionary
 
@@ -86,14 +85,18 @@ def make_corpus(raw_file, dictionary):
 		# corpus = [dictionary.doc2bow(text.lower().split()) for text in open(raw_file)]
 
 		# when using tf-idf
-		if args.vec == 'tfidf':
-			tfidf = models.TfidfModel(corpus)
-			corpus = tfidf[corpus]
+		tfidf = models.TfidfModel(corpus)
+		corpus = tfidf[corpus]
 
 		return corpus
 
 	except (IOError, OSError):
 		print("Error opening / processing file")
+
+
+def look_up(doc):
+	# TODO : implement lookup function
+	pass
 	
 
 def main():
@@ -114,7 +117,7 @@ def main():
 
 	# TODO : add any other possible options
 
-	# TODO : implement lookup function
+	# TODO : implement save/load 
 
 	if args.model == 'lda':
 		print "----------------------------------------"
