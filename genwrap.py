@@ -100,6 +100,21 @@ def look_up(model, dictionary, tfidf, doc):
 	doc_value = model[tfidf[dictionary.doc2bow(doc.lower().split())]]
 
 	return doc_value
+
+
+def word_to_vec(sentences, size):
+	# TODO : implement word2vec wrapper
+
+	# sentences = list of list of words
+	return w2v = models.word2vec.Word2Vec(sentences, size=size, window=5, min_count=5, workers=4)
+
+
+def doc_to_vec(documents, size):
+	# TODO : implement doc2vec wrapper
+
+	# documents = ???
+	return d2v = models.doc2vec.Doc2Vec(documents, size=size, window=8, min_count=5, workers=4)
+	
 	
 
 def main():
