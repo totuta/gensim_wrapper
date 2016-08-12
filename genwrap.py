@@ -27,7 +27,7 @@ import numpy as np
 
 from six import iteritems
 
-from utils import read_large_file
+from utils import read_large_file, lemmatizer
 
 
 def get_arguments():
@@ -48,7 +48,6 @@ def get_arguments():
     print "LIST OF ARGUMENTS"
     for arg in vars(args):
         print arg, ":", getattr(args, arg)
-    print "----------------------------------------"
 
     return args
 
@@ -67,6 +66,8 @@ def make_dictionary(raw_file):
 		dictionary.filter_tokens(stop_ids + once_ids)
 		dictionary.compactify()
 
+		# TODO : do lemmatization
+
 		return dictionary
 
 	except (IOError, OSError):
@@ -78,6 +79,8 @@ def make_corpus(raw_file, dictionary):
 	try:
 		corpus = [dictionary.doc2bow(text.lower().split()) for text in read_large_file(open(raw_file))]
 		# corpus = [dictionary.doc2bow(text.lower().split()) for text in open(raw_file)]
+
+		# TODO : do tf-idf
 
 		return corpus
 
@@ -91,17 +94,32 @@ def main():
 
 	INPUT_FILE = 'data/sample_corpus.txt'
 
+	print "----------------------------------------"
+	print "making dictionary.."
 	dictionary = make_dictionary(INPUT_FILE)
+	print "dictionary done."
+
+	print "----------------------------------------"
+	print "making corpus.."
 	corpus     = make_corpus(INPUT_FILE, dictionary)
+	print "corpus done."
 
 	# TODO : add any other possible options
 
 	if args.mode == 'lda':
+		print "----------------------------------------"
+		print "doing LDA.."
 		lda = gensim.models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary, num_topics=100, update_every=1, chunksize=10000, passes=1)
 		print lda.print_topics(5)
+		print "LDA done."
+
 	elif args.mode == 'lsi':
+		print "----------------------------------------"
+		print "doing LSI.."
 		lsi = gensim.models.lsimodel.LsiModel(corpus=corpus, id2word=dictionary, num_topics=400)
 		print lsi.print_topics(5)
+		print "LSI done."
+
 	else:
 		raise ValueError('choose proper mode: lda/lsi')
 

@@ -17,8 +17,9 @@ date: 08/12/2016
 # import gensim
 # from gensim import corpora
 
-# import nltk
-# from nltk.corpus import stopwords
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 
 # import string
 # import argparse
@@ -34,3 +35,27 @@ def read_large_file(file_object):
 		if not data:
 			break
 		yield data
+
+def lemmatizer(word, pos='n'):
+    '''
+    lemmatize a word by using NLTK WordNet lemmatizer
+    pos : 'n' for noun
+          'v' for verb
+          'r' for adverb
+          'j' for adjective
+          default value is 'n' (NLTK default)
+    '''
+
+    # load lemmatizer
+    lemmatizer = WordNetLemmatizer()
+
+    lemmatized_word = lemmatizer.lemmatize(word, pos=pos)
+
+    # TODO : exception/error handing
+    #        1) saw -> see
+    # if lemmatized_word == 'saw':
+    # 	lemmatized_word = 'see'
+    # else:
+    # 	pass
+
+    return lemmatized_word
