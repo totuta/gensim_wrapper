@@ -89,7 +89,7 @@ def main():
 
 	args = get_arguments()
 
-	INPUT_FILE = 'data/stimuli_384sentences_dereferencedpronouns.txt'
+	INPUT_FILE = 'data/sample_corpus.txt'
 
 	dictionary = make_dictionary(INPUT_FILE)
 	corpus     = make_corpus(INPUT_FILE, dictionary)
