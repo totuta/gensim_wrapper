@@ -15,7 +15,7 @@ import math
 import time
 
 import gensim
-from gensim import corpora, models
+from gensim import corpora, models, utils
 
 import nltk
 from nltk.corpus import stopwords
@@ -27,7 +27,7 @@ import numpy as np
 
 from six import iteritems
 
-from utils import read_large_file, lemmatizer
+from utils import read_large_file
 
 
 def get_arguments():
@@ -37,8 +37,12 @@ def get_arguments():
     parser = argparse.ArgumentParser()
 
     # choose mode
-    parser.add_argument('--mode', type=str, default='lda',
+    parser.add_argument('--model', type=str, default='lda',
                         help='choose mode : lda/lsi')
+
+    # choose vectorization
+    parser.add_argument('--vec', type=str, default='bow',
+                        help='choose vectorization : bow/tfidf')
     
     args = parser.parse_args()
     print "arguments parsing done."
@@ -57,7 +61,8 @@ def make_dictionary(raw_file):
 	stoplist = stopwords.words('english')
 
 	try:
-		dictionary = corpora.Dictionary(line.lower().split() for line in read_large_file(open(raw_file)))
+		dictionary = corpora.Dictionary(utils.lemmatize(line) for line in read_large_file(open(raw_file)))
+		# dictionary = corpora.Dictionary(line.lower().split() for line in read_large_file(open(raw_file)))
 		# dictionary = corpora.Dictionary(line.lower().split() for line in open(raw_file))
 
 		# remove stopwords and once-words
@@ -81,8 +86,9 @@ def make_corpus(raw_file, dictionary):
 		# corpus = [dictionary.doc2bow(text.lower().split()) for text in open(raw_file)]
 
 		# when using tf-idf
-		tfidf = models.TfidfModel(corpus)
-		corpus = tfidf[corpus]
+		if args.vec == 'tfidf':
+			tfidf = models.TfidfModel(corpus)
+			corpus = tfidf[corpus]
 
 		return corpus
 
@@ -108,7 +114,9 @@ def main():
 
 	# TODO : add any other possible options
 
-	if args.mode == 'lda':
+	# TODO : implement lookup function
+
+	if args.model == 'lda':
 		print "----------------------------------------"
 		print "doing LDA.."
 		lda = gensim.models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary, num_topics=100, update_every=1, chunksize=10000, passes=1)
@@ -119,7 +127,7 @@ def main():
 
 		print "LDA done."
 
-	elif args.mode == 'lsi':
+	elif args.model == 'lsi':
 		print "----------------------------------------"
 		print "doing LSI.."
 		lsi = gensim.models.lsimodel.LsiModel(corpus=corpus, id2word=dictionary, num_topics=400)
