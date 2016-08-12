@@ -120,12 +120,18 @@ def main():
 
 	# TODO : add any other possible options
 
-	# TODO : implement save/load 
-
 	if args.model == 'lda':
 		print "----------------------------------------"
 		print "doing LDA.."
-		lda = gensim.models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary, num_topics=100, update_every=1, chunksize=10000, passes=1)
+		# lda = gensim.models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary, num_topics=100, update_every=1, chunksize=10000, passes=1)
+
+		# load/save
+		lda.save('model/model.lda')
+		dictionary.save('model/dict.lda')
+		tfidf.save('model/tfidf.lda')
+		# lda = models.LdaModel.load('model/model.lda')
+		# dictionary = corpora.Dictionary.load('model/dict.lda')
+		# tfidf = models.TfidfModel.load('model/tfidf.lda')
 
 		topics = lda.print_topics(10)
 		for topic in topics:
@@ -142,6 +148,14 @@ def main():
 		print "----------------------------------------"
 		print "doing LSI.."
 		lsi = gensim.models.lsimodel.LsiModel(corpus=corpus, id2word=dictionary, num_topics=400)
+
+		# load/save
+		lsi.save('model/model.lsi')
+		dictionary.save('model/dict.lda')
+		tfidf.save('model/tfidf.lda')
+		# lsi = models.LsiModel.load('model/model.lsi')
+		# dictionary = corpora.Dictionary.load('model/dict.lda')
+		# tfidf = models.TfidfModel.load('model/tfidf.lda')
 
 		topics = lsi.print_topics(10)
 		for topic in topics:
