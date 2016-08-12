@@ -110,20 +110,25 @@ def main():
 		print "----------------------------------------"
 		print "doing LDA.."
 		lda = gensim.models.ldamodel.LdaModel(corpus=corpus, id2word=dictionary, num_topics=100, update_every=1, chunksize=10000, passes=1)
-		print lda.print_topics(5)
+
+		topics = lda.print_topics(10)
+		for topic in topics:
+			print dictionary.id2token[topic[0]], topic[1]
+
 		print "LDA done."
 
 	elif args.mode == 'lsi':
 		print "----------------------------------------"
 		print "doing LSI.."
 		lsi = gensim.models.lsimodel.LsiModel(corpus=corpus, id2word=dictionary, num_topics=400)
-		print lsi.print_topics(5)
+
+		topics = lsi.print_topics(10)
+		for topic in topics:
+			print dictionary.id2token[topic[0]], topic[1]
+
 		print "LSI done."
 
 	else:
 		raise ValueError('choose proper mode: lda/lsi')
-
-	
-
 
 if __name__ == '__main__' : main()
