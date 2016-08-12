@@ -80,11 +80,9 @@ def make_corpus(raw_file, dictionary):
 		corpus = [dictionary.doc2bow(text.lower().split()) for text in read_large_file(open(raw_file))]
 		# corpus = [dictionary.doc2bow(text.lower().split()) for text in open(raw_file)]
 
-		# TODO : do tf-idf
-
+		# when using tf-idf
 		tfidf = models.TfidfModel(corpus)
-
-		print tfidf
+		corpus = tfidf[corpus]
 
 		return corpus
 
