@@ -4,7 +4,7 @@
 '''
 filename: genwrap.py
 description: a python wrapper for gensim APIs
-version : 0.1 (basic funciton. NO support for generator yet)
+version : 0.2 (basic funciton with support for generator)
 author: Wonchang Chung
 date: 08/12/2016
 '''
