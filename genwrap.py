@@ -15,7 +15,7 @@ import math
 import time
 
 import gensim
-from gensim import corpora
+from gensim import corpora, models
 
 import nltk
 from nltk.corpus import stopwords
@@ -81,6 +81,10 @@ def make_corpus(raw_file, dictionary):
 		# corpus = [dictionary.doc2bow(text.lower().split()) for text in open(raw_file)]
 
 		# TODO : do tf-idf
+
+		tfidf = models.TfidfModel(corpus)
+
+		print tfidf
 
 		return corpus
 
