@@ -88,15 +88,18 @@ def make_corpus(raw_file, dictionary):
 		tfidf = models.TfidfModel(corpus)
 		corpus = tfidf[corpus]
 
-		return corpus
+		return corpus, tfidf
 
 	except (IOError, OSError):
 		print("Error opening / processing file")
 
 
-def look_up(doc):
-	# TODO : implement lookup function
-	pass
+def look_up(model, dictionary, tfidf, doc):
+	# topic lookup function
+
+	doc_value = model[tfidf[dictionary.doc2bow(doc.lower().split())]]
+
+	return doc_value
 	
 
 def main():
@@ -107,12 +110,12 @@ def main():
 
 	print "----------------------------------------"
 	print "making dictionary.."
-	dictionary = make_dictionary(INPUT_FILE)
+	dictionary    = make_dictionary(INPUT_FILE)
 	print "dictionary done."
 
 	print "----------------------------------------"
 	print "making corpus.."
-	corpus     = make_corpus(INPUT_FILE, dictionary)
+	corpus, tfidf = make_corpus(INPUT_FILE, dictionary)
 	print "corpus done."
 
 	# TODO : add any other possible options
@@ -126,6 +129,11 @@ def main():
 
 		topics = lda.print_topics(10)
 		for topic in topics:
+			print dictionary.id2token[topic[0]], topic[1]
+
+		value = look_up(lda, dictionary, tfidf, "I like scissors and hammer and control and earthquake")
+
+		for topic in value:
 			print dictionary.id2token[topic[0]], topic[1]
 
 		print "LDA done."
