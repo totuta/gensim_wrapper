@@ -115,7 +115,7 @@ def doc_to_vec(documents, size):
 	tagged_documents = models.doc2vec.TaggedLineDocument(documents)
 
 	model = models.doc2vec.Doc2Vec(tagged_documents, size=size, window=10, min_count=5, workers=11,alpha=0.025, min_alpha=0.025)
-	model.build_vocab(tagged_documents)
+	model.build_vocab
 
 	# TODO : train in loop with changing parameters
 	model.train
