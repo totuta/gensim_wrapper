@@ -106,15 +106,21 @@ def word_to_vec(sentences, size):
 	# TODO : implement word2vec wrapper
 
 	# sentences = list of list of words
-	return w2v = models.word2vec.Word2Vec(sentences, size=size, window=5, min_count=5, workers=4)
+	return models.word2vec.Word2Vec(sentences, size=size, window=5, min_count=5, workers=4)
 
 
 def doc_to_vec(documents, size):
 	# TODO : implement doc2vec wrapper
 
-	# documents = ???
-	return d2v = models.doc2vec.Doc2Vec(documents, size=size, window=8, min_count=5, workers=4)
-	
+	tagged_documents = models.doc2vec.TaggedLineDocument(documents)
+
+	model = models.doc2vec.Doc2Vec(tagged_documents, size=size, window=10, min_count=5, workers=11,alpha=0.025, min_alpha=0.025)
+	model.build_vocab(tagged_documents)
+
+	# TODO : train in loop with changing parameters
+	model.train
+
+	return model
 	
 
 def main():
